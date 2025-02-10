@@ -9,12 +9,18 @@ import java.math.RoundingMode;
  * year-to-date (YTD) earnings, taxes, and payroll processing.
  */
 public abstract class Employee implements IEmployee {
-    private String name;               // Employee's name
-    private String id;                 // Unique employee ID
-    private double payRate;            // Pay rate (hourly or annual salary)
-    private double ytdEarnings;        // Year-to-date earnings
-    private double ytdTaxesPaid;       // Year-to-date taxes paid
-    private double pretaxDeductions;   // Pre-tax deductions for the employee
+    /** Name of the employee. */
+    private String name;
+    /** Unique employee ID */
+    private String id;
+    /** Pay rate (hourly or annual salary) */
+    private double payRate;
+    /** Year-to-date earnings */
+    private double ytdEarnings;
+    /** Year-to-date taxes paid */
+    private double ytdTaxesPaid;
+    /** Pre-tax deductions for the employee */
+    private double pretaxDeductions;
 
     /**
      * Constructor for Employee.
