@@ -11,15 +11,15 @@ import java.math.RoundingMode;
 public abstract class Employee implements IEmployee {
     /** Name of the employee. */
     private String name;
-    /** Unique employee ID */
+    /** Unique employee ID. */
     private String id;
-    /** Pay rate (hourly or annual salary) */
+    /** Pay rate (hourly or annual salary). */
     private double payRate;
-    /** Year-to-date earnings */
+    /** Year-to-date earnings. */
     private double ytdEarnings;
-    /** Year-to-date taxes paid */
+    /** Year-to-date taxes paid. */
     private double ytdTaxesPaid;
-    /** Pre-tax deductions for the employee */
+    /** Pre-tax deductions for the employee. */
     private double pretaxDeductions;
 
     /**
@@ -32,7 +32,8 @@ public abstract class Employee implements IEmployee {
      * @param ytdTaxesPaid Total taxes paid by the employee in the year
      * @param pretaxDeductions Employee's pre-tax deductions
      */
-    public Employee(String name, String id, double payRate, double ytdEarnings, double ytdTaxesPaid, double pretaxDeductions) {
+    public Employee(String name, String id, double payRate, double ytdEarnings, double ytdTaxesPaid,
+                    double pretaxDeductions) {
         this.name = name;
         this.id = id;
         this.payRate = payRate;

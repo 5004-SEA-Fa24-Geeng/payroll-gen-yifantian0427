@@ -8,15 +8,15 @@ import java.math.RoundingMode;
  * This class stores details such as net pay, taxes paid, and year-to-date (YTD) earnings.
  */
 public class PayStub implements IPayStub {
-    /** Reference to the employee for whom the pay stub is generated */
+    /** Reference to the employee for whom the pay stub is generated. */
     private IEmployee employee;
-    /** Net pay after deductions and taxes */
+    /** Net pay after deductions and taxes. */
     private double netPay;
-    /** Taxes deducted for the current pay period */
+    /** Taxes deducted for the current pay period. */
     private double taxesPaid;
-    /** Employee's year-to-date earnings */
+    /** Employee's year-to-date earnings. */
     private double ytdEarnings;
-    /** Employee's year-to-date taxes paid */
+    /** Employee's year-to-date taxes paid. */
     private double ytdTaxesPaid;
 
     /**
