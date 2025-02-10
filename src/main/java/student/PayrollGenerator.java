@@ -1,8 +1,8 @@
 package student;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 /**
  * Main driver for the PayrollGenerator program.
@@ -69,7 +69,25 @@ public final class PayrollGenerator {
         // as it is invalid, but if is 0, you still generate a paystub, but the amount is 0.
 
         //YOUR CODE HERE
-      
+        try {
+            for (ITimeCard timeCard: timeCardList) {
+                double hoursWorked = timeCard.getHoursWorked();
+                if (hoursWorked < 0) {
+                    continue;
+                }
+                IEmployee matchedEmployee = employees.stream()
+                        .filter(emp -> emp.getID().equals(timeCard.getEmployeeID()))
+                        .findFirst()
+                        .orElse(null);
+                if (matchedEmployee == null) {
+                    continue;
+                }
+                IPayStub payStub = matchedEmployee.runPayroll(hoursWorked);
+                payStubs.add(payStub);
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("Caught Exception: " + e.getMessage());
+        }
 
          // now save out employees to a new file
 

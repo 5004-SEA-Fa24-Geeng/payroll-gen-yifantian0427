@@ -5,20 +5,24 @@ This report helps you demonstrate your understanding of the concepts. You should
 ## Technical Questions
 
 1. What does CSV stand for? 
-   
+
+    It stands for Comma-separated values.
 
 2. Why would you declare `List<IEmployee>` instead of `ArrayList<HourlyEmployee>`?
 
+    Because 'List<IEmployee>' can code to an interface rather than a specific implementation. `List<IEmployee>` can hold any object that implements the `IEmployee` interface—not just HourlyEmployee objects.
+
 3. When you have one class referencing another object, such as storing that object as one of the attributes of the first class - what type of relationship is that called (between has-a and is-a)?
+
+    It's a `has-a` relationship.
 
 4. Can you provide an example of a has-a relationship in your code (if one exists)?
 
-
 5. Can you provide an example of an is-a relationship in your code (if one exists)?
-
 
 6. What is the difference between an interface and an abstract class?
 
+    
 
 7. What is the advantage of using an interface over an abstract class?
 
