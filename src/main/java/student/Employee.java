@@ -59,16 +59,26 @@ public abstract class Employee implements IEmployee {
             return null; // Skip payroll processing if negative hours
         }
 
+        if (hoursWorked == 0 && getEmployeeType().equals("HOURLY")) {
+            return new PayStub(this, 0.0, 0.0, getYTDEarnings(), getYTDTaxesPaid());
+        }
+
         double grossPay = calculateGrossPay(hoursWorked);
+        BigDecimal netPay = BigDecimal.valueOf(grossPay)
+                .subtract(BigDecimal.valueOf(pretaxDeductions))
+                .setScale(2, RoundingMode.HALF_UP);
+
+        BigDecimal taxAmount = netPay.multiply(BigDecimal.valueOf(0.2265))
+                .setScale(2, RoundingMode.HALF_UP);
+        netPay = netPay.subtract(taxAmount);
         double taxablePay = grossPay - pretaxDeductions;
-        double taxAmount = taxablePay * 0.2265; // 22.65% total tax rate
-        double netPay = grossPay - pretaxDeductions - taxAmount;
+
 
         // Update YTD earnings and taxes
-        ytdEarnings = round(ytdEarnings + grossPay);
-        ytdTaxesPaid = round(ytdTaxesPaid + taxAmount);
+        ytdEarnings += netPay.doubleValue();
+        ytdTaxesPaid += taxAmount.doubleValue();
 
-        return new PayStub(this, netPay, taxAmount, ytdEarnings, ytdTaxesPaid);
+        return new PayStub(this, netPay.doubleValue(), taxAmount.doubleValue(), ytdEarnings, ytdTaxesPaid);
     }
 
     @Override
