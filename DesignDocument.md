@@ -113,41 +113,40 @@ You should feel free to number your brainstorm.
 2. Test that the `Employee` class properly returns `id` from `getId()`
 3. continue to add your brainstorm here (you don't need to super formal - this is a brainstorm) - yes, you can change the bullets above to something that fits your design.
 
-Employee Tests:
+General Employee Tests
+1. Test that getName() properly returns the employee’s name.
+2. Test that getID() properly returns the employee’s ID.
+3. Test that toCSV() properly converts an employee to the expected CSV format.
+4. Test that attempting to create an employee with an invalid ID (e.g., empty string) throws an exception.
 
-Test 1: Verify that an HourlyEmployee returns the correct name when getName() is called.
-Test 2: Verify that an HourlyEmployee returns the correct id when getId() is called.
-Test 3: Verify that a SalaryEmployee returns the correct name using getName().
-Test 4: Verify that a SalaryEmployee returns the correct id using getId().
-Test 5: Check that the calculatePay() method of an HourlyEmployee returns the correct pay based on a set of input values (pay rate, hours worked, etc.).
-Test 6: Check that the calculatePay() method of a SalaryEmployee returns the expected pay (perhaps considering deductions and taxes).
+SalaryEmployee Tests
+5. Test that getEmployeeType() returns "SALARY".
 
-PayStub Tests:
+6. Test that calculateGrossPay() always returns the correct bi-weekly salary.
 
-Test 7: Verify that an object implementing IPayStub produces the correct pay stub output (string format, values, etc.) when generatePayStub() is called.
-Test 8: Ensure that all necessary information (employee details, pay, deductions, etc.) appears correctly in the pay stub.
+7. Test that runPayroll() always creates a PayStub with the correct pay, regardless of hours worked.
 
-TimeCard Tests:
+8. Test that runPayroll() returns null when given negative hours.
 
-Test 9: For an implementation of ITimeCard, verify that it correctly returns the number of hours worked for a given day.
-Test 10: Verify that the time card properly records and returns the date associated with the hours worked.
+PayStub Tests
+9. Test that getPay() returns the correct pay.
 
-FileUtil Tests:
+10. Test that getTaxesPaid() returns the correct tax deduction.
 
-Test 11: Test that FileUtil.readFile() reads an existing CSV file correctly and returns the expected list of strings.
-Test 12: Test that FileUtil.writeFile() creates/updates a file correctly when given valid data.
-Test 13: Test error handling in FileUtil by attempting to read from a file that does not exist, ensuring it fails gracefully.
+11. Test that toCSV() properly formats the pay stub data.
 
-Builder Tests:
+12. Test that PayStub correctly stores and retrieves historical earnings.
 
-Test 14: Verify that Builder.buildEmployeeData(line) correctly parses a CSV line into an IEmployee object (for both HourlyEmployee and SalaryEmployee) with the right attribute values.
-Test 15: Verify that Builder.buildTimeCardData(line) correctly parses a CSV line into an ITimeCard object.
-Test 16: Test error cases in the Builder methods (e.g., missing fields, invalid numbers) to ensure that appropriate error handling or exceptions occur.
+Builder Tests
+13. Test that buildEmployeeFromCSV() correctly constructs an HourlyEmployee from valid CSV input.
 
-PayrollGenerator Tests:
+14. Test that buildEmployeeFromCSV() correctly constructs a SalaryEmployee from valid CSV input.
 
-Test 17: Simulate a full run of PayrollGenerator.main() using a test CSV file and verify that the program reads the file, processes the data, and produces the correct output.
-Test 18: Check that PayrollGenerator handles empty or malformed CSV files without crashing (e.g., by logging errors and skipping bad records).
+15. Test that buildEmployeeFromCSV() returns null for invalid CSV input.
+
+16. Test that buildTimeCardFromCSV() correctly constructs a TimeCard from valid CSV input.
+
+17. Test that buildTimeCardFromCSV() returns null for malformed CSV input.
 
 
 ## (FINAL DESIGN): Class Diagram
@@ -156,7 +155,124 @@ Go through your completed code, and update your class diagram to reflect the fin
 
 > [!WARNING]
 > If you resubmit your assignment for manual grading, this is a section that often needs updating. You should double check with every resubmit to make sure it is up to date.
+```mermaid
+classDiagram
+    direction TB
 
+%% Interfaces
+    class IEmployee {
+        <<interface>>
+        + getName() : String
+        + getID() : String
+        + getPayRate() : double
+        + getEmployeeType() : String
+        + getYTDEarnings() : double
+        + getYTDTaxesPaid() : double
+        + getPretaxDeductions() : double
+        + runPayroll(hoursWorked : double) : IPayStub
+        + toCSV() : String
+    }
+
+    class IPayStub {
+        <<interface>>
+        + getPay() : double
+        + getTaxesPaid() : double
+        + toCSV() : String
+    }
+
+    class ITimeCard {
+        <<interface>>
+        + getEmployeeID() : String
+        + getHoursWorked() : double
+    }
+
+%% Abstract Class
+    class Employee {
+        <<abstract>>
+        - name : String
+        - id : String
+        - payRate : double
+        - ytdEarnings : double
+        - ytdTaxesPaid : double
+        - pretaxDeductions : double
+        + Employee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions)
+        + getName() : String
+        + getID() : String
+        + getPayRate() : double
+        + getYTDEarnings() : double
+        + getYTDTaxesPaid() : double
+        + getPretaxDeductions() : double
+        + runPayroll(hoursWorked : double) : IPayStub
+        + toCSV() : String
+        # calculateGrossPay(hoursWorked : double) : double
+    }
+
+%% Concrete Employee Classes
+    class HourlyEmployee {
+        + HourlyEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions)
+        + getEmployeeType() : String
+        # calculateGrossPay(hoursWorked : double) : double
+    }
+
+    class SalaryEmployee {
+        + SalaryEmployee(name, id, payRate, ytdEarnings, ytdTaxesPaid, pretaxDeductions)
+        + getEmployeeType() : String
+        # calculateGrossPay(hoursWorked : double) : double
+    }
+
+%% PayStub Class
+    class PayStub {
+        - employee : IEmployee
+        - netPay : double
+        - taxesPaid : double
+        - ytdEarnings : double
+        - ytdTaxesPaid : double
+        + PayStub(employee : IEmployee, netPay : double, taxesPaid : double, ytdEarnings : double, ytdTaxesPaid : double)
+        + getPay() : double
+        + getTaxesPaid() : double
+        + toCSV() : String
+    }
+
+%% Builder Class
+    class Builder {
+        + buildEmployeeFromCSV(csv : String) : IEmployee
+        + buildTimeCardFromCSV(csv : String) : ITimeCard
+    }
+
+%% File Utility Class
+    class FileUtil {
+        + readFileToList(file : String) : List~String~
+        + writeFile(outFile : String, lines : List~String~)
+    }
+
+%% Payroll Generator Class
+    class PayrollGenerator {
+        + main(args : String[])
+    }
+
+%% "Anonymous" TimeCard Class Renamed
+    class TimeCardFromBuilder {
+        <<anonymous>>
+        + getEmployeeID() : String
+        + getHoursWorked() : double
+    }
+
+%% Relationships
+    IEmployee <|.. Employee
+    Employee <|-- HourlyEmployee
+    Employee <|-- SalaryEmployee
+
+    IPayStub <|.. PayStub
+    PayStub --> IEmployee : holds reference
+
+    ITimeCard <|.. TimeCardFromBuilder
+    Builder --> IEmployee : builds
+    Builder --> ITimeCard : builds
+
+    PayrollGenerator --> FileUtil : uses
+    PayrollGenerator --> Builder : uses
+    FileUtil
+```
 
 
 
@@ -167,3 +283,7 @@ Go through your completed code, and update your class diagram to reflect the fin
 > The value of reflective writing has been highly researched and documented within computer science, from learning new information to showing higher salaries in the workplace. For this next part, we encourage you to take time, and truly focus on your retrospective.
 
 Take time to reflect on how your design has changed. Write in *prose* (i.e. do not bullet point your answers - it matters in how our brain processes the information). Make sure to include what were some major changes, and why you made them. What did you learn from this process? What would you do differently next time? What was the most challenging part of this process? For most students, it will be a paragraph or two. 
+
+One of the biggest lessons I learned from this process was the importance of iteration in design. The initial plan, while useful as a starting point, needed refinement as I encountered real-world constraints and edge cases during implementation. If I were to approach this project again, I would focus more on early-stage prototyping and testing to identify structural issues sooner. Additionally, I found that writing thorough tests alongside development was invaluable, as it helped catch inconsistencies and ensured that each component functioned as intended.
+
+The most challenging part of this process was managing dependencies between different components while maintaining modularity. For example, ensuring that PayrollGenerator interacted efficiently with FileUtil and Builder required careful planning to prevent unnecessary coupling. Overall, this project reinforced the importance of designing with flexibility in mind, as real-world constraints often necessitate changes that a rigid design would struggle to accommodate.

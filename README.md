@@ -5,7 +5,7 @@ Github Account name: yifantian0427
 
 Link to Assignment on Github: https://github.com/5004-SEA-Fa24-Geeng/payroll-gen-yifantian0427.git
 
-How many hours did it take you to complete this assignment (estimate)? 10 hours
+How many hours did it take you to complete this assignment (estimate)? 13 hours
 
 Did you collaborate with any other students/TAs/Professors? If so, tell us who and in whatcapacity.
 
